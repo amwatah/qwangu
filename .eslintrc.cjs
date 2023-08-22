@@ -11,6 +11,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
+    "@next/next/no-img-element": "off" ,
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
@@ -19,6 +20,7 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+
   },
 };
 

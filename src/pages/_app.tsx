@@ -9,7 +9,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import MainLayout from "@/components/layouts/MainLayout";
 import { useState } from "react";
 
-
 function App({ Component, pageProps }: AppProps) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
   const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value ?? (colorScheme === "dark" ? "light" : "dark"));
@@ -28,7 +27,8 @@ function App({ Component, pageProps }: AppProps) {
               colorPrimary: "#e11d48",
             },
           }}
-          {...pageProps}>
+          {...pageProps}
+        >
           <MantineProvider
             withGlobalStyles
             withNormalizeCSS
@@ -41,7 +41,8 @@ function App({ Component, pageProps }: AppProps) {
                 dark: ["#d5d7e0", "#acaebf", "#8c8fa3", "#666980", "#4d4f66", "#34354a", "#2b2c3d", "#1d1e30", "#0c0d21", "#01010a"],
               },
               loader: "bars",
-            }}>
+            }}
+          >
             <ModalsProvider>
               <Notifications />
               <MainLayout>

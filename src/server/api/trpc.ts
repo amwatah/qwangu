@@ -11,6 +11,12 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "@/server/db";
+import { getAuth } from "@clerk/nextjs/server";
+import type { SignedInAuthObject, SignedOutAuthObject } from "@clerk/nextjs/server";
+
+interface AuthContext {
+  auth: SignedInAuthObject | SignedOutAuthObject;
+}
 
 /**
  * 1. CONTEXT
@@ -19,8 +25,6 @@ import { prisma } from "@/server/db";
  *
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
-
-type CreateContextOptions = Record<string, never>;
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
@@ -32,9 +36,10 @@ type CreateContextOptions = Record<string, never>;
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-const createInnerTRPCContext = (_opts: CreateContextOptions) => {
+const createInnerTRPCContext = ({ auth }: AuthContext) => {
   return {
     prisma,
+    auth,
   };
 };
 
@@ -45,7 +50,7 @@ const createInnerTRPCContext = (_opts: CreateContextOptions) => {
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = (_opts: CreateNextContextOptions) => {
-  return createInnerTRPCContext({});
+  return createInnerTRPCContext({ auth: getAuth(_opts.req) });
 };
 
 /**
@@ -63,8 +68,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape,
       data: {
         ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+        zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
       },
     };
   },

@@ -37,7 +37,7 @@ export default function LeftDrawer() {
           <NavLink label="For Sale" icon={<HiOutlineHomeModern size={20} className=" text-rose-600" />} />
         </Link>
         <hr />
-        <Link href="/">
+        <Link href="/listings/new">
           <NavLink label="Add Listing" icon={<MdOutlineAddHomeWork size={20} className=" text-rose-600" />} />
         </Link>
         <Link href="/">

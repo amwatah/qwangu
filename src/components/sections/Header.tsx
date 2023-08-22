@@ -29,9 +29,11 @@ export default function Header() {
       <TextInput placeholder="I am searching for..." className=" hidden w-56 sm:inline-flex" rightSection={<BsSearch />} radius="xl" />
       <div className=" flex items-center">
         {user ? (
-          <Button className=" hidden rounded-full sm:inline-flex" size="xs">
-            Add Listing
-          </Button>
+          <Link href="/listings/new">
+            <Button className=" hidden rounded-full sm:inline-flex" size="xs">
+              Add Listing
+            </Button>
+          </Link>
         ) : (
           <SignInButton mode="modal">
             <Button className=" hidden rounded-full sm:inline-flex" size="xs">
@@ -52,7 +54,7 @@ export default function Header() {
               <Link href="/">
                 <NavLink icon={<UserButton />} />
               </Link>
-              <Link href="/">
+              <Link href="/listings/new">
                 <NavLink label="Add Listing" icon={<MdOutlineAddHomeWork size={20} />} />
               </Link>
               <Link href="/">

@@ -3,7 +3,7 @@ import { Button } from "@mantine/core";
 export default function Home() {
   return (
     <main>
-      <Button>Qwangu</Button>
+      <Button className=" animate-slideInDown">Qwangu</Button>
     </main>
   );
 }

@@ -9,7 +9,6 @@ export default function MainLayout({ children }: { children: ReactNode }) {
         <Header />
       </div>
       <LeftDrawer />
-
       <section className=" z-0 w-full px-2">{children}</section>
     </main>
   );

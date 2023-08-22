@@ -14,7 +14,7 @@ export default function Header() {
   const [drawerOpen, setDrawerOpen] = useAtom(drawerOpenAtom);
 
   return (
-    <div className=" flex items-center justify-between p-1 px-2 shadow-lg">
+    <div className=" z-[10000000] flex items-center justify-between bg-opacity-0 p-1 px-2 shadow-lg">
       <Burger
         opened={drawerOpen}
         onClick={() => {
@@ -23,7 +23,7 @@ export default function Header() {
         size="sm"
         className=" sm:hidden"
       />
-      <Link href="/" className=" grow text-center font-bold text-rose-600 sm:grow-0 sm:text-lg">
+      <Link href="/" className=" grow bg-rose-700  bg-clip-text text-center font-semibold text-transparent sm:grow-0 sm:text-lg">
         Qwangu
       </Link>
       <TextInput placeholder="I am searching for..." className=" hidden w-56 sm:inline-flex" rightSection={<BsSearch />} radius="xl" />

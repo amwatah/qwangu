@@ -8,8 +8,57 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Listing {
+  id           String    @id @unique @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  name         String
+  propertyType String
+  county       String
+  town         String
+  location     String
+  cost         Int
+  extras       String?
+  description  String?
+  contact      String
+  vacancies    Int
+  amenities    String[]
+  promoted     Boolean   @default(false)
+  verified     Boolean   @default(false)
+  member       Member    @relation(fields: [memberId], references: [id])
+  memberId     String
+  reviews      Reveiws[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String
+  paid      Boolean  @default(false)
+}
+
+model Reveiws {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  message   String
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  listingId String
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String
+}
+
+model Member {
+  id               String    @id @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  name             String?
+  role             String?
+  phone            String?
+  email            String?
+  bookedListings   Booking[]
+  createdListings  Listing[]
+  reviewedListings Reveiws[]
 }

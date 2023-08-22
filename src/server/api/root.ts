@@ -1,4 +1,5 @@
-import { createTRPCRouter, publicProcedure } from "./trpc";
+import { ListingsRouter } from "./routers/listings";
+import { createTRPCRouter } from "./trpc";
 
 /**
  * This is the primary router for our backend.
@@ -6,9 +7,7 @@ import { createTRPCRouter, publicProcedure } from "./trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  hello: publicProcedure.query(() => {
-    return "Hello Qwangu";
-  }),
+  listings: ListingsRouter,
 });
 
 // export type definition of API

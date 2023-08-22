@@ -34,8 +34,6 @@ function App({ Component, pageProps }: AppProps) {
             withNormalizeCSS
             theme={{
               colorScheme: colorScheme,
-              primaryColor: "qwangu",
-              primaryShade: 6,
               colors: {
                 qwangu: ["#fff1f2", "#fecdd3", "#fda4af", "#fb7185", "#f43f5e", "#e11d48", "#be123c", "#9f1239", "#881337", "#4c0519"],
                 dark: ["#d5d7e0", "#acaebf", "#8c8fa3", "#666980", "#4d4f66", "#34354a", "#2b2c3d", "#1d1e30", "#0c0d21", "#01010a"],

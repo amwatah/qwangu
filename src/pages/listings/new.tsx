@@ -1,10 +1,9 @@
-import { kenyanCounties } from "@/utils/constansts";
-import { Button, Checkbox, Image, NumberInput, Paper, Select, SimpleGrid, Stepper, TextInput, Textarea } from "@mantine/core";
+import { kenyanCounties, typesOfProperties } from "@/utils/constansts";
+import { Button, Checkbox, FileInput, NumberInput, Paper, Select, Stepper, TextInput, Textarea } from "@mantine/core";
 import { type ReactNode, useState } from "react";
 import { MdWifi, MdOutlineWaterDrop, MdLocalParking, MdOutlineBalcony, MdOutlineDoorSliding, MdOutlineLock } from "react-icons/md";
 import { FaSink, FaPaintRoller } from "react-icons/fa";
 import { RiArchiveDrawerLine } from "react-icons/ri";
-import { Dropzone, IMAGE_MIME_TYPE, type FileWithPath } from "@mantine/dropzone";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 
@@ -12,7 +11,7 @@ export default function NewListingPage() {
   const [active, setActive] = useState(0);
   const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
-  const [files, setFiles] = useState<FileWithPath[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const form = useForm<{
     name: string;
@@ -20,7 +19,7 @@ export default function NewListingPage() {
     town: string;
     location: string;
     listingType: string;
-    cost: string;
+    cost: number;
     extras: string;
     description: string;
     vacancies: number;
@@ -37,15 +36,14 @@ export default function NewListingPage() {
         listingType: z.string().nonempty(),
         vacancies: z.number().nonnegative().gt(0),
         contact: z.string().nonempty().min(9),
+        description: z.string().min(6, "Short description ,give more details").optional(),
+        cost: z.number().nonnegative().gt(0),
       })
     ),
   });
-  const previews = files.map((file, index) => {
-    const imageUrl = URL.createObjectURL(file);
-    return <Image alt="preview" key={index} src={imageUrl} imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }} />;
-  });
+
   return (
-    <main className=" container mx-auto w-full ">
+    <main className=" container mx-auto min-h-screen w-full ">
       <form
         onSubmit={form.onSubmit(() => {
           console.log("done");
@@ -55,24 +53,53 @@ export default function NewListingPage() {
           <Stepper.Step description="Listing Info">
             <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3">
               <TextInput {...form.getInputProps("name")} label="AD title /Property Name" withAsterisk required />
-              <Select {...form.getInputProps("listingType")} data={["Bedsitter", "Single"]} label="Property Type" withAsterisk required />
+              <Select
+                {...form.getInputProps("listingType")}
+                data={typesOfProperties}
+                label="Property Type"
+                defaultValue="Bedsitter"
+                searchable
+                withAsterisk
+                required
+              />
               <TextInput {...form.getInputProps("contact")} label="Phone number" withAsterisk required />
-              <Select {...form.getInputProps("county")} data={kenyanCounties} label="County" withAsterisk required />
+              <Select {...form.getInputProps("county")} data={kenyanCounties} label="County" searchable defaultValue="Nairobi" withAsterisk required />
               <TextInput {...form.getInputProps("town")} label="Town" withAsterisk required />
               <TextInput {...form.getInputProps("location")} label="Street/Specific location" withAsterisk required />
-              <TextInput {...form.getInputProps("cost")} label="Monthly Payment/Cost" withAsterisk required />
+              <NumberInput {...form.getInputProps("cost")} label="Monthly Payment/Cost" withAsterisk required />
               <TextInput {...form.getInputProps("extras")} label="Extra payments ?Indicate" />
-              <NumberInput {...form.getInputProps("vacancies")} label="Available Vacancies" withAsterisk required />
-              <Textarea label="Description (relevant info not captured)" className=" sm:col-span-3" autosize minRows={3} />
+              <NumberInput {...form.getInputProps("vacancies")} label="Available Vacancies" defaultValue={1} withAsterisk required />
+              <Textarea
+                {...form.getInputProps("description")}
+                label="Description (relevant info not captured)"
+                className=" sm:col-span-3"
+                autosize
+                minRows={3}
+              />
               <div className=" flex items-center justify-end sm:col-span-3">
-                <Button type="button" onClick={() => nextStep()}>
-                  Next
-                </Button>
+                {form.isDirty() &&
+                form.isValid("name") &&
+                form.isValid("listingType") &&
+                form.isValid("contact") &&
+                form.isValid("county") &&
+                form.isValid("town") &&
+                form.isValid("county") &&
+                form.isValid("cost") &&
+                form.isValid("vacancies") &&
+                form.isValid("description") ? (
+                  <Button type="button" onClick={() => nextStep()}>
+                    Next
+                  </Button>
+                ) : (
+                  <Button disabled type="button" onClick={() => nextStep()}>
+                    Next
+                  </Button>
+                )}
               </div>
             </div>
           </Stepper.Step>
           <Stepper.Step description="Amenities">
-            <Paper className="  grid w-full  grid-cols-1   gap-y-4 shadow-lg sm:grid-cols-2 ">
+            <Paper className="  grid w-full  grid-cols-1   gap-y-4 p-2 shadow-lg  sm:grid-cols-2">
               <div className=" flex flex-col p-4">
                 <p>Select Available amenities</p>
                 <Checkbox.Group {...form.getInputProps("amenities")}>
@@ -104,15 +131,43 @@ export default function NewListingPage() {
               </div>
             </Paper>
           </Stepper.Step>
-          <Stepper.Step description="Image Uploados">
-            <div className="">
-              <Dropzone accept={IMAGE_MIME_TYPE} maxFiles={10} onDrop={(newFiles) => setFiles([...files, ...newFiles])} multiple>
-                <p className="">Drop atleast 3 images of the listing</p>
-              </Dropzone>
-              {files.length}
-              <SimpleGrid cols={4} breakpoints={[{ maxWidth: "sm", cols: 1 }]} mt={previews.length > 0 ? "xl" : 0}>
-                {previews}
-              </SimpleGrid>
+          <Stepper.Step description="Image Uploads">
+            <div className="mx-auto flex w-full flex-col justify-center sm:w-1/2">
+              <div className=" m-1 my-4">
+                <FileInput
+                  label="Upload atleast 1 Image of your property"
+                  value={selectedFiles}
+                  onChange={(files) => setSelectedFiles([...selectedFiles, ...files])}
+                  multiple
+                  clearable
+                  capture="user"
+                  className=" w-full"
+                />
+              </div>
+              <div className="">
+                {selectedFiles.length > 0 && (
+                  <div className="">
+                    <div className="  flex  items-center gap-x-2">
+                      {selectedFiles.map((file, index) => (
+                        <div key={index} className=" h-52 ">
+                          {file.type.startsWith("image/") ? (
+                            <img className="  max-h-full max-w-full" src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
+                          ) : (
+                            <p>{file.name}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className=" my-2 flex w-full items-center justify-between">
+                <Button type="button" onClick={() => prevStep()}>
+                  Prev
+                </Button>
+                <Button type="submit">Submit</Button>
+              </div>
             </div>
           </Stepper.Step>
           <Stepper.Completed>Completed, click back button to get to previous step</Stepper.Completed>

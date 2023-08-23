@@ -1,4 +1,4 @@
-import { Burger, Button, Menu, NavLink, TextInput } from "@mantine/core";
+import { Burger, Button, Menu, NavLink, Text, TextInput } from "@mantine/core";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { BsSearch, BsHouseCheck, BsHouseHeart } from "react-icons/bs";
@@ -23,8 +23,8 @@ export default function Header() {
         size="sm"
         className=" sm:hidden"
       />
-      <Link href="/" className=" grow bg-rose-700  bg-clip-text text-center font-semibold text-transparent sm:grow-0 sm:text-lg">
-        Qwangu
+      <Link href="/" className="  font-bold">
+        <Text>Qwangu</Text>
       </Link>
       <TextInput placeholder="I am searching for..." className=" hidden w-56 sm:inline-flex" rightSection={<BsSearch />} radius="xl" />
       <div className=" flex items-center">

@@ -89,3 +89,18 @@ export const houseAmenities: string[] = [
   "Close to Restaurants",
   "Security Guard",
 ];
+
+export const typesOfProperties = [
+  "Bedsitter",
+  "Single Room",
+  "Double Room",
+  "1 Bedroom",
+  "2 Bedroom",
+  "3 Bedroom",
+  "4+ Bedroom",
+  "Apartments",
+  "House",
+  "Hostel",
+  "Office space",
+  "Shop space",
+];

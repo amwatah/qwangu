@@ -97,7 +97,7 @@ export default function NewListingPage() {
   }
 
   return (
-    <main className=" container mx-auto min-h-screen w-full ">
+    <main className="  min-h-screen  w-full pt-4 ">
       <form
         onSubmit={form.onSubmit((values) => {
           handleSubmit(values);
@@ -146,7 +146,7 @@ export default function NewListingPage() {
             </div>
           </Stepper.Step>
           <Stepper.Step description="Amenities">
-            <Paper className="  grid w-full  grid-cols-1   gap-y-4 p-2 shadow-lg  sm:grid-cols-2">
+            <Paper className="  grid w-full  grid-cols-1   p-2 shadow-lg  sm:grid-cols-2">
               <div className=" flex flex-col p-4">
                 <p>Select Available amenities</p>
                 <Checkbox.Group {...form.getInputProps("amenities")}>

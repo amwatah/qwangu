@@ -1,4 +1,5 @@
 export const kenyanCounties: string[] = [
+  "Nairobi",
   "Baringo",
   "Bomet",
   "Bungoma",
@@ -28,7 +29,6 @@ export const kenyanCounties: string[] = [
   "Migori",
   "Mombasa",
   "Murang'a",
-  "Nairobi",
   "Nakuru",
   "Nandi",
   "Narok",

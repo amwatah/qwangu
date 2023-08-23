@@ -1,13 +1,22 @@
 import { kenyanCounties, typesOfProperties } from "@/utils/constansts";
-import { Button, Checkbox, FileInput, NumberInput, Paper, Select, Stepper, TextInput, Textarea } from "@mantine/core";
+import { Button, Checkbox, FileInput, LoadingOverlay, NumberInput, Paper, Select, Stepper, TextInput, Textarea } from "@mantine/core";
 import { type ReactNode, useState } from "react";
 import { MdWifi, MdOutlineWaterDrop, MdLocalParking, MdOutlineBalcony, MdOutlineDoorSliding, MdOutlineLock } from "react-icons/md";
 import { FaSink, FaPaintRoller } from "react-icons/fa";
 import { RiArchiveDrawerLine } from "react-icons/ri";
 import { useForm, zodResolver } from "@mantine/form";
+import { useUploadFile } from "react-firebase-hooks/storage";
 import { z } from "zod";
+import { useUser } from "@clerk/nextjs";
+import { api } from "@/utils/api";
+import { showNotification } from "@mantine/notifications";
+import { ref } from "firebase/storage";
+import { storageBucket } from "@/utils/firestoreConfig";
 
 export default function NewListingPage() {
+  const { user } = useUser();
+  const createNewListing = api.listings.createNewListing.useMutation();
+  const [uploadFile, uploading] = useUploadFile();
   const [active, setActive] = useState(0);
   const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
@@ -42,33 +51,71 @@ export default function NewListingPage() {
     ),
   });
 
+  function handleSubmit(values: typeof form.values) {
+    if (selectedFiles.length) {
+      selectedFiles.forEach((file, index) => {
+        void (async () => {
+          const uploadResult = await uploadFile(ref(storageBucket, `listings/${values.name.split(" ").join("")}/${index}`), file);
+          console.log(uploadResult?.metadata);
+        })();
+      });
+      createNewListing.mutate(
+        {
+          creatorId: user?.id ?? "",
+          name: values.name,
+          county: values.county,
+          town: values.town,
+          location: values.location,
+          listingType: values.listingType,
+          cost: values.cost,
+          extras: values.extras,
+          description: values.description,
+          vacancies: values.vacancies,
+          amenities: values.amenities,
+          contact: values.contact,
+          uploadedImages: selectedFiles.length,
+        },
+        {
+          onSettled: (data, error) => {
+            if (data) {
+              showNotification({
+                title: "Sucess",
+                message: "Your listing has been added",
+              });
+            }
+            if (error) {
+              showNotification({
+                title: "Error",
+                message: error.message,
+              });
+            }
+          },
+        }
+      );
+    } else {
+    }
+  }
+
   return (
     <main className=" container mx-auto min-h-screen w-full ">
       <form
-        onSubmit={form.onSubmit(() => {
-          console.log("done");
+        onSubmit={form.onSubmit((values) => {
+          handleSubmit(values);
         })}
       >
+        <LoadingOverlay visible={createNewListing.isLoading || uploading} />
         <Stepper active={active} onStepClick={setActive} breakpoint="sm" allowNextStepsSelect={false}>
           <Stepper.Step description="Listing Info">
             <div className=" grid grid-cols-1 gap-4 sm:grid-cols-3">
               <TextInput {...form.getInputProps("name")} label="AD title /Property Name" withAsterisk required />
-              <Select
-                {...form.getInputProps("listingType")}
-                data={typesOfProperties}
-                label="Property Type"
-                defaultValue="Bedsitter"
-                searchable
-                withAsterisk
-                required
-              />
+              <Select {...form.getInputProps("listingType")} data={typesOfProperties} label="Property Type" searchable withAsterisk required />
               <TextInput {...form.getInputProps("contact")} label="Phone number" withAsterisk required />
-              <Select {...form.getInputProps("county")} data={kenyanCounties} label="County" searchable defaultValue="Nairobi" withAsterisk required />
+              <Select {...form.getInputProps("county")} data={kenyanCounties} label="County" searchable withAsterisk required />
               <TextInput {...form.getInputProps("town")} label="Town" withAsterisk required />
               <TextInput {...form.getInputProps("location")} label="Street/Specific location" withAsterisk required />
               <NumberInput {...form.getInputProps("cost")} label="Monthly Payment/Cost" withAsterisk required />
               <TextInput {...form.getInputProps("extras")} label="Extra payments ?Indicate" />
-              <NumberInput {...form.getInputProps("vacancies")} label="Available Vacancies" defaultValue={1} withAsterisk required />
+              <NumberInput {...form.getInputProps("vacancies")} label="Available Vacancies" withAsterisk required />
               <Textarea
                 {...form.getInputProps("description")}
                 label="Description (relevant info not captured)"
@@ -166,7 +213,9 @@ export default function NewListingPage() {
                 <Button type="button" onClick={() => prevStep()}>
                   Prev
                 </Button>
-                <Button type="submit">Submit</Button>
+                <Button disabled={!selectedFiles.length} type="submit">
+                  Submit
+                </Button>
               </div>
             </div>
           </Stepper.Step>

@@ -17,6 +17,7 @@ export const ListingsRouter = createTRPCRouter({
         amenities: z.string().array(),
         contact: z.string(),
         creatorId: z.string(),
+        uploadedImages: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -34,6 +35,7 @@ export const ListingsRouter = createTRPCRouter({
             vacancies: input.vacancies,
             amenities: input.amenities,
             contact: input.contact,
+            uploadedImages: input.uploadedImages,
             member: {
               connectOrCreate: {
                 where: {

@@ -9,25 +9,27 @@ datasource db {
 }
 
 model Listing {
-  id           String    @id @unique @default(uuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  name         String
-  propertyType String
-  county       String
-  town         String
-  location     String
-  cost         Int
-  extras       String?
-  description  String?
-  contact      String
-  vacancies    Int
-  amenities    String[]
-  promoted     Boolean   @default(false)
-  verified     Boolean   @default(false)
-  member       Member    @relation(fields: [memberId], references: [id])
-  memberId     String
-  reviews      Reveiws[]
+  id             String   @id @unique @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String
+  propertyType   String
+  county         String
+  town           String
+  location       String
+  cost           Int
+  extras         String?
+  description    String?
+  contact        String
+  vacancies      Int
+  amenities      String[]
+  promoted       Boolean  @default(false)
+  verified       Boolean  @default(false)
+  uploadedImages Int
+  member         Member   @relation(fields: [memberId], references: [id])
+  memberId       String
+
+  reviews Reveiws[]
 }
 
 model Booking {

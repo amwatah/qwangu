@@ -1,4 +1,4 @@
-import { Burger, Button, Input, Menu, NavLink, Paper, Text} from "@mantine/core";
+import { Burger, Button, Input, Menu, NavLink, Paper, Text } from "@mantine/core";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { BsSearch, BsHouseCheck, BsHouseHeart } from "react-icons/bs";
@@ -14,7 +14,7 @@ export default function Header() {
   const [drawerOpen, setDrawerOpen] = useAtom(drawerOpenAtom);
 
   return (
-    <Paper className="  sticky -top-1 z-[100] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow-2xl sm:p-4 sm:px-8">
+    <Paper className="  fixed top-0 z-[1000] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow-2xl sm:p-4 sm:px-8">
       <div className=" flex flex-1">
         <Burger
           opened={drawerOpen}
@@ -32,7 +32,7 @@ export default function Header() {
         <Input placeholder="I'm searching for... " className=" hidden   w-3/4 sm:inline-flex" rightSection={<BsSearch />} radius="xl" />
       </div>
 
-      <div className=" flex items-center  justify-end flex-1">
+      <div className=" flex flex-1  items-center justify-end">
         {user ? (
           <Link href="/listings/new">
             <Button className=" hidden rounded-full sm:inline-flex" size="xs">
@@ -55,7 +55,7 @@ export default function Header() {
                 <CgProfile size={24} />
               </div>
             </Menu.Target>
-            <Menu.Dropdown className=" z-50">
+            <Menu.Dropdown className=" z-[1001]">
               <Link href="/">
                 <NavLink icon={<UserButton />} />
               </Link>

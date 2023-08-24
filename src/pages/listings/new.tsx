@@ -29,7 +29,7 @@ export default function NewListingPage() {
     location: string;
     listingType: string;
     cost: number;
-    extras: string;
+    isForsale: string;
     description: string;
     vacancies: number;
     amenities: string[];
@@ -68,11 +68,11 @@ export default function NewListingPage() {
           location: values.location,
           listingType: values.listingType,
           cost: values.cost,
-          extras: values.extras,
           description: values.description,
           vacancies: values.vacancies,
           amenities: values.amenities,
           contact: values.contact,
+          isForSale: values.isForsale === "true",
           uploadedImages: selectedFiles.length,
         },
         {
@@ -113,8 +113,17 @@ export default function NewListingPage() {
               <Select {...form.getInputProps("county")} data={kenyanCounties} label="County" searchable withAsterisk required />
               <TextInput {...form.getInputProps("town")} label="Town" withAsterisk required />
               <TextInput {...form.getInputProps("location")} label="Street/Specific location" withAsterisk required />
+              <Select
+                data={[
+                  { label: "For Rent", value: "false" },
+                  { label: "For Sale", value: "true" },
+                ]}
+                {...form.getInputProps("isForsale")}
+                label="Payment Type"
+                withAsterisk
+                required
+              />
               <NumberInput {...form.getInputProps("cost")} label="Monthly Payment/Cost" withAsterisk required />
-              <TextInput {...form.getInputProps("extras")} label="Extra payments ?Indicate" />
               <NumberInput {...form.getInputProps("vacancies")} label="Available Vacancies" withAsterisk required />
               <Textarea
                 {...form.getInputProps("description")}

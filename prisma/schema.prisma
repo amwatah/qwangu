@@ -18,11 +18,12 @@ model Listing {
   town           String
   location       String
   cost           Int
-  extras         String?
   description    String?
   contact        String
   vacancies      Int
+  bedRooms       Int      @default(0)
   amenities      String[]
+  isForSale      Boolean  @default(false)
   promoted       Boolean  @default(false)
   verified       Boolean  @default(false)
   uploadedImages Int

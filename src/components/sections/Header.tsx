@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <Paper className="  fixed top-0 z-[1000] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow-2xl sm:p-4 sm:px-8">
-      <div className=" flex flex-1">
+      <div className=" flex flex-1 items-center">
         <Burger
           opened={drawerOpen}
           onClick={() => {
@@ -25,7 +25,7 @@ export default function Header() {
           className=" sm:hidden"
         />
         <Link href="/" className="  font-bold">
-            <h2>Qwangu</h2>
+          <h2>Qwangu</h2>
         </Link>
       </div>
       <div className=" hidden h-full flex-[8] grow justify-center sm:flex">
@@ -38,16 +38,18 @@ export default function Header() {
       </div>
 
       <div className=" flex flex-1  items-center justify-end gap-x-2 font-bold">
-        <Link href="/listings">Listings</Link>
+        <Link href="/listings" className="hidden rounded-full sm:inline-flex">
+          Listings
+        </Link>
         {user ? (
-          <Link href="/listings/new" className=" hidden rounded-full sm:inline-flex">         
-              Add Listing
+          <Link href="/listings/new" className=" hidden rounded-full sm:inline-flex">
+            Add Listing
           </Link>
         ) : (
-          <SignInButton mode="modal">         
-          <Link href="/" className=" hidden rounded-full sm:inline-flex">         
-             Sign Up
-          </Link>
+          <SignInButton mode="modal">
+            <Link href="/" className=" hidden rounded-full sm:inline-flex">
+              Sign Up
+            </Link>
           </SignInButton>
         )}
 

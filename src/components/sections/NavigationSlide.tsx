@@ -15,7 +15,7 @@ export default function NavigationSlide() {
       <div className=" flex w-full justify-center  sm:hidden">
         <Input placeholder="I'm searching for... " className=" mx-auto w-[95%]" rightSection={<BsSearch />} radius="xl" />
       </div>
-      <div className="flex w-full gap-x-1  overflow-x-scroll  sm:justify-center">
+      <div className=" flex w-full justify-center  gap-x-1 overflow-x-scroll">
         <Link href="#request" onClick={() => setSelectedProperty("Hostel")} className=" group flex flex-col items-center justify-center  p-2">
           <span>
             <BiSolidSchool size={20} className=" group-hover:animate-pulse " />

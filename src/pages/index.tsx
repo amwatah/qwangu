@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <div className="">
       <NavigationSlide />
-      <div id="promoted" className=" grid grid-cols-1 gap-2 px-2  pt-[12vh] sm:grid-cols-3 md:grid-cols-4">
+      <div id="promoted" className=" grid grid-cols-1 gap-2 px-2 pt-[20vh]  sm:grid-cols-3 sm:pt-[12vh] md:grid-cols-4">
         <h4 className=" item-center flex w-full justify-between sm:col-span-3 md:col-span-4">
           <span>Promoted</span>
           <Link href="/listings">

@@ -1,4 +1,5 @@
 import { ListingsRouter } from "./routers/listings";
+import { reviewsRouter } from "./routers/reviews";
 import { createTRPCRouter } from "./trpc";
 
 /**
@@ -8,6 +9,7 @@ import { createTRPCRouter } from "./trpc";
  */
 export const appRouter = createTRPCRouter({
   listings: ListingsRouter,
+  reviews: reviewsRouter,
 });
 
 // export type definition of API

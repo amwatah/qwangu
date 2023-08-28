@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import { storageBucket } from "@/utils/firestoreConfig";
-import { Button, CopyButton, Text } from "@mantine/core";
+import { Button, CopyButton, Paper, Text, TextInput } from "@mantine/core";
 import { ref } from "firebase/storage";
 import { useRouter } from "next/router";
 import { useDownloadURL } from "react-firebase-hooks/storage";
@@ -8,13 +8,21 @@ import { houseAmenitiesItems } from "./new";
 import ListingImage from "@/components/sections/ListingImage";
 import { MdShare } from "react-icons/md";
 import ListingCard from "@/components/sections/ListingCard";
+import { useState } from "react";
+import { CgProfile } from "react-icons/cg";
+import { useUser } from "@clerk/nextjs";
 
 export default function SingleListingPage() {
+  const { user } = useUser();
   const listingId = useRouter().query.id;
   const listingInfo = api.listings.getListingInfo.useQuery({ listingId: listingId as string });
   const similarListings = api.listings.getRelatedListings.useQuery({ propertyType: listingInfo.data?.propertyType });
   const listingsBySameOwner = api.listings.getRelatedListings.useQuery({ ownerId: listingInfo.data?.memberId });
+  const listingReviews = api.reviews.getListingReviews.useQuery({ listingId: listingId as string });
+  const addReveiw = api.reviews.addReveiw.useMutation();
   const [logoUrl, , error] = useDownloadURL(ref(storageBucket, `listings/${listingInfo.data?.name.split(" ").join("")}/${0}`));
+
+  const [reveiwMessage, setReveiwMessage] = useState("");
   return (
     <div className=" grid grid-cols-1 gap-y-2 sm:grid-cols-2">
       <section className=" order-2 py-2 sm:order-1 sm:col-span-2">
@@ -94,7 +102,46 @@ export default function SingleListingPage() {
           )}
         </CopyButton>
       </section>
-      <section className=" order-3  sm:col-span-2">reveiws</section>
+      <section className=" order-3  flex flex-col gap-y-2 sm:col-span-2">
+        <div className="flex items-center justify-start gap-x-1">
+          <TextInput
+            value={reveiwMessage}
+            onChange={(e) => setReveiwMessage(e.target.value)}
+            placeholder="Add annoymous reveiw"
+            radius="xl"
+            className=" w-[95%] sm:w-[30vw]"
+            rightSection={
+              <Button
+                onClick={() => {
+                  addReveiw.mutate({
+                    listingId: listingInfo.data?.id ?? "",
+                    memberId: user?.id ?? "",
+                    reveiwMessage: reveiwMessage,
+                  });
+                  if (addReveiw.isSuccess) {
+                    void listingReviews.refetch();
+                  }
+                }}
+                className="rounded-full"
+              >
+                Reveiw
+              </Button>
+            }
+          />
+        </div>
+        <div className="grid-col-1 grid max-h-[30vh] gap-2 overflow-y-scroll sm:grid-cols-2">
+          {listingReviews.data?.reviews.map((reveiw) => (
+            <Paper key={reveiw.id} withBorder className="flex flex-col p-2 py-4">
+              <div className="my-1  flex justify-between">
+                <CgProfile size={24} />
+                <p>{reveiw.createdAt.toLocaleString()}</p>
+              </div>
+              <hr />
+              <p>{reveiw.message}</p>
+            </Paper>
+          ))}
+        </div>
+      </section>
       <section className=" order-3  grid grid-cols-1 sm:col-span-2 sm:grid-cols-4">
         <h3 className=" sm:col-span-4">Listings from same Owner</h3>
         {listingsBySameOwner.data?.map((listing, index) => (

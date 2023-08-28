@@ -9,9 +9,9 @@ datasource db {
 }
 
 model Listing {
-  id             String   @id @unique @default(uuid())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id             String    @id @unique @default(uuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   name           String
   propertyType   String
   county         String
@@ -21,25 +21,27 @@ model Listing {
   description    String?
   contact        String
   vacancies      Int
-  bedRooms       Int      @default(0)
+  bedRooms       Int       @default(0)
   amenities      String[]
-  isForSale      Boolean  @default(false)
-  promoted       Boolean  @default(false)
-  verified       Boolean  @default(false)
+  isForSale      Boolean   @default(false)
+  promoted       Boolean   @default(false)
+  verified       Boolean   @default(false)
   uploadedImages Int
-  member         Member   @relation(fields: [memberId], references: [id])
+  member         Member    @relation(fields: [memberId], references: [id])
   memberId       String
-
-  reviews Reveiws[]
+  reviews        Reveiws[]
 }
 
 model Booking {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  paid      Boolean  @default(false)
   member    Member   @relation(fields: [memberId], references: [id])
   memberId  String
-  paid      Boolean  @default(false)
+  listingId String
+
+  @@unique([memberId, listingId])
 }
 
 model Reveiws {

@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import { storageBucket } from "@/utils/firestoreConfig";
-import { Button, CopyButton, Paper, Text, TextInput } from "@mantine/core";
+import { Button, CopyButton, LoadingOverlay, Paper, Text, TextInput } from "@mantine/core";
 import { ref } from "firebase/storage";
 import { useRouter } from "next/router";
 import { useDownloadURL } from "react-firebase-hooks/storage";
@@ -11,15 +11,29 @@ import ListingCard from "@/components/sections/ListingCard";
 import { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { useUser } from "@clerk/nextjs";
+import { openConfirmModal } from "@mantine/modals";
 
 export default function SingleListingPage() {
   const { user } = useUser();
   const listingId = useRouter().query.id;
+  const router = useRouter();
   const listingInfo = api.listings.getListingInfo.useQuery({ listingId: listingId as string });
   const similarListings = api.listings.getRelatedListings.useQuery({ propertyType: listingInfo.data?.propertyType });
   const listingsBySameOwner = api.listings.getRelatedListings.useQuery({ ownerId: listingInfo.data?.memberId });
   const listingReviews = api.reviews.getListingReviews.useQuery({ listingId: listingId as string });
   const addReveiw = api.reviews.addReveiw.useMutation();
+  const bookListing = api.bookings.addListingBooking.useMutation({
+    onSuccess: () => {
+      openConfirmModal({
+        title: "Space  Booked",
+        children: <>You have booked a spot on this listing . Proceed to payment ?</>,
+        labels: { confirm: "Checkout", cancel: "Cancel" },
+        onCancel: () => console.log("Cancel"),
+        onConfirm: () => void router.push("/mybookings"),
+        centered: true,
+      });
+    },
+  });
   const [logoUrl, , error] = useDownloadURL(ref(storageBucket, `listings/${listingInfo.data?.name.split(" ").join("")}/${0}`));
 
   const [reveiwMessage, setReveiwMessage] = useState("");
@@ -77,7 +91,19 @@ export default function SingleListingPage() {
         </div>
         <div className=" flex w-full  justify-end">
           {listingInfo.data?.vacancies && listingInfo.data.vacancies > 1 ? (
-            <Button>Book Space</Button>
+            <>
+              <LoadingOverlay visible={bookListing.isLoading} />
+              <Button
+                onClick={() => {
+                  bookListing.mutate({
+                    listingId: listingInfo.data?.id ?? "",
+                    memberId: user?.id ?? "",
+                  });
+                }}
+              >
+                Book Space
+              </Button>
+            </>
           ) : (
             <p className="">No vacancies currently ! Check again later</p>
           )}

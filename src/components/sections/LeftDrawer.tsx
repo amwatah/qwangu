@@ -1,7 +1,7 @@
 import { drawerOpenAtom, selectedPropertyAtom } from "@/stores";
 import { Drawer, NavLink } from "@mantine/core";
 import { BiSolidSchool, BiBed } from "react-icons/bi";
-import { MdOutlineBedroomChild, MdApartment, MdOutlineAddHomeWork, MdQuestionMark, MdOutlineCall, MdOutlinePrivacyTip } from "react-icons/md";
+import { MdOutlineBedroomChild, MdApartment, MdOutlineAddHomeWork, MdOutlineCall, MdOutlinePrivacyTip } from "react-icons/md";
 import { FaQ, FaHandshakeSimple } from "react-icons/fa6";
 import { HiOutlineHomeModern } from "react-icons/hi2";
 import { useAtom } from "jotai";
@@ -9,7 +9,7 @@ import Link from "next/link";
 import { BsFillHousesFill } from "react-icons/bs";
 export default function LeftDrawer() {
   const [drawerOpen, setDrawerOpen] = useAtom(drawerOpenAtom);
-  const [selectedProperty, setSelectedProperty] = useAtom(selectedPropertyAtom);
+  const [, setSelectedProperty] = useAtom(selectedPropertyAtom);
 
   return (
     <>

@@ -235,7 +235,7 @@ export default function NewListingPage() {
   );
 }
 
-const houseAmenitiesItems: { amenity: string; icon: ReactNode }[] = [
+export const houseAmenitiesItems: { amenity: string; icon: ReactNode }[] = [
   {
     amenity: "Wifi",
     icon: <MdWifi />,

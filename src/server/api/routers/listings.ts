@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
+
 export const ListingsRouter = createTRPCRouter({
   createNewListing: publicProcedure
     .input(
@@ -129,6 +130,104 @@ export const ListingsRouter = createTRPCRouter({
           },
         });
         return listings;
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+
+  getFilteredListings: publicProcedure
+    .input(
+      z.object({
+        county: z.string().optional(),
+        locale: z.string().optional(),
+        listingType: z.string().optional(),
+        minPrice: z.number().optional(),
+        maxPrice: z.number().optional(),
+        limit: z.number().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const matchedListings = await ctx.prisma.listing.findMany({
+          where: {
+            AND: [
+              input.county
+                ? {
+                    county: input.county,
+                  }
+                : {},
+              input.listingType
+                ? {
+                    propertyType: input.listingType,
+                  }
+                : {},
+              input.maxPrice
+                ? {
+                    cost: { lte: input.maxPrice },
+                  }
+                : {},
+              input.minPrice
+                ? {
+                    cost: { gte: input.minPrice },
+                  }
+                : {},
+              input.locale
+                ? {
+                    OR: [
+                      {
+                        town: {
+                          contains: input.locale,
+                          mode: "insensitive",
+                        },
+                      },
+                      {
+                        location: {
+                          contains: input.locale,
+                          mode: "insensitive",
+                        },
+                      },
+                    ],
+                  }
+                : {},
+            ],
+          },
+        });
+        return matchedListings;
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+
+  getRelatedListings: publicProcedure
+    .input(
+      z.object({
+        ownerId: z.string().optional(),
+        propertyType: z.string().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const matchedListings = await ctx.prisma.listing.findMany({
+          where: {
+            OR: [
+              input.ownerId
+                ? {
+                    memberId: input.ownerId,
+                  }
+                : {},
+              input.propertyType
+                ? {
+                    propertyType: input.propertyType,
+                  }
+                : {},
+            ],
+          },
+          select: {
+            id: true,
+          },
+          take: 20,
+        });
+        return matchedListings;
       } catch (error) {
         console.log(error);
       }

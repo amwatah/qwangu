@@ -1,4 +1,4 @@
-import { Burger, Button, Input, Menu, NavLink, Paper, Text } from "@mantine/core";
+import { Burger, Input, Menu, NavLink, Paper } from "@mantine/core";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { BsSearch, BsHouseCheck, BsHouseHeart } from "react-icons/bs";
@@ -25,25 +25,29 @@ export default function Header() {
           className=" sm:hidden"
         />
         <Link href="/" className="  font-bold">
-          <Text className=" text-lg">Qwangu</Text>
+            <h2>Qwangu</h2>
         </Link>
       </div>
       <div className=" hidden h-full flex-[8] grow justify-center sm:flex">
-        <Input placeholder="I'm searching for... " className=" hidden   w-3/4 sm:inline-flex" rightSection={<BsSearch />} radius="xl" />
+        <Input
+          placeholder="I'm searching for... "
+          className=" hidden   w-3/4 sm:inline-flex"
+          rightSection={<BsSearch className=" cursor-pointer" />}
+          radius="xl"
+        />
       </div>
 
-      <div className=" flex flex-1  items-center justify-end">
+      <div className=" flex flex-1  items-center justify-end gap-x-2 font-bold">
+        <Link href="/listings">Listings</Link>
         {user ? (
-          <Link href="/listings/new">
-            <Button className=" hidden rounded-full sm:inline-flex" size="xs">
+          <Link href="/listings/new" className=" hidden rounded-full sm:inline-flex">         
               Add Listing
-            </Button>
           </Link>
         ) : (
-          <SignInButton mode="modal">
-            <Button className=" hidden rounded-full sm:inline-flex" size="xs">
-              Sign Up
-            </Button>
+          <SignInButton mode="modal">         
+          <Link href="/" className=" hidden rounded-full sm:inline-flex">         
+             Sign Up
+          </Link>
           </SignInButton>
         )}
 

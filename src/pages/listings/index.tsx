@@ -1,21 +1,23 @@
 import ListingCard from "@/components/sections/ListingCard";
+import { globalSearchValueAtom } from "@/stores";
 import { api } from "@/utils/api";
 import { kenyanCounties, typesOfProperties } from "@/utils/constansts";
 import { Loader, NumberInput, Paper, Select, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useAtom } from "jotai";
 
 export default function ListingsPage() {
+  const [globalSearchValue, setGlobalSearchValue] = useAtom(globalSearchValueAtom);
   const filterForm = useForm<{
     county?: string;
     minPrice?: number;
     maxPrice?: number;
     listingType?: string;
-    locale?: string;
   }>();
 
   const matchedListings = api.listings.getFilteredListings.useQuery({
     county: filterForm.values.county,
-    locale: filterForm.values.locale,
+    locale: globalSearchValue,
     listingType: filterForm.values.listingType,
     minPrice: filterForm.values.minPrice,
     maxPrice: typeof filterForm.values.maxPrice === "number" ? filterForm.values.maxPrice : undefined,
@@ -28,7 +30,7 @@ export default function ListingsPage() {
         <form className="  z-50 my-2 grid w-full grid-cols-1 gap-2  sm:grid-cols-5">
           <Select searchable description="County" {...filterForm.getInputProps("county")} data={kenyanCounties} />
           <Select searchable description="Type" {...filterForm.getInputProps("listingType")} data={typesOfProperties} />
-          <TextInput description="Around.." {...filterForm.getInputProps("locale")} />
+          <TextInput description="Around" value={globalSearchValue} onChange={(e) => setGlobalSearchValue(e.target.value)} />
           <NumberInput description="MIN PRICE" step={1000} type="number" {...filterForm.getInputProps("minPrice")} />
           <NumberInput description="MAX PRICE" step={1000} type="number" {...filterForm.getInputProps("maxPrice")} />
         </form>

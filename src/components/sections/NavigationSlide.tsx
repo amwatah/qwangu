@@ -4,16 +4,30 @@ import { MdApartment, MdOutlineHouse } from "react-icons/md";
 import { HiOutlineHomeModern } from "react-icons/hi2";
 
 import { BsSearch } from "react-icons/bs";
-import { Input, Paper } from "@mantine/core";
+import { Button, Input, Paper } from "@mantine/core";
 import { useAtom } from "jotai";
-import { selectedPropertyAtom } from "@/stores";
+import { globalSearchValueAtom, selectedPropertyAtom } from "@/stores";
+import { useRouter } from "next/router";
 
 export default function NavigationSlide() {
+  const router = useRouter();
   const [, setSelectedProperty] = useAtom(selectedPropertyAtom);
+  const [globalSearchValue, setGlobalSearchValue] = useAtom(globalSearchValueAtom);
   return (
     <Paper className="  grid-col-1  fixed  left-0 top-[7vh]   z-[100] mx-auto grid w-screen pb-0 pt-4 shadow-none sm:top-[8vh]">
       <div className=" flex w-full justify-center  sm:hidden">
-        <Input placeholder="I'm searching for... " className=" mx-auto w-[95%]" rightSection={<BsSearch />} radius="xl" />
+        <Input
+          value={globalSearchValue}
+          onChange={(e) => setGlobalSearchValue(e.target.value)}
+          placeholder="I'm searching for... "
+          className=" mx-auto w-[95%]"
+          rightSection={
+            <Button onClick={() => void router.push("/listings")} className=" rounded-full" color="blue">
+              <BsSearch />
+            </Button>
+          }
+          radius="xl"
+        />
       </div>
       <div className=" flex w-full justify-center  gap-x-1 overflow-x-scroll">
         <Link href="#request" onClick={() => setSelectedProperty("Hostel")} className=" group flex flex-col items-center justify-center  p-2">

@@ -1,4 +1,4 @@
-import { Burger, Input, Menu, NavLink, Paper } from "@mantine/core";
+import { Burger, Button, Input, Menu, NavLink, Paper } from "@mantine/core";
 import Link from "next/link";
 import { CgProfile } from "react-icons/cg";
 import { BsSearch, BsHouseCheck, BsHouseHeart } from "react-icons/bs";
@@ -7,11 +7,14 @@ import { MdOutlineAddHomeWork } from "react-icons/md";
 import ThemeToggle from "./ThemeToggle";
 import { SignInButton, SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { useAtom } from "jotai";
-import { drawerOpenAtom } from "@/stores";
+import { drawerOpenAtom, globalSearchValueAtom } from "@/stores";
+import { useRouter } from "next/router";
 
 export default function Header() {
   const { user } = useUser();
+  const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useAtom(drawerOpenAtom);
+  const [globalSearchValue, setGlobalSearchValue] = useAtom(globalSearchValueAtom);
 
   return (
     <Paper className="  fixed top-0 z-[1000] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow-2xl sm:p-4 sm:px-8">
@@ -30,9 +33,15 @@ export default function Header() {
       </div>
       <div className=" hidden h-full flex-[8] grow justify-center sm:flex">
         <Input
+          value={globalSearchValue}
+          onChange={(e) => setGlobalSearchValue(e.target.value)}
           placeholder="I'm searching for... "
           className=" hidden   w-3/4 sm:inline-flex"
-          rightSection={<BsSearch className=" cursor-pointer" />}
+          rightSection={
+            <Button onClick={() => void router.push("/listings")} className=" rounded-full" color="blue">
+              <BsSearch />
+            </Button>
+          }
           radius="xl"
         />
       </div>

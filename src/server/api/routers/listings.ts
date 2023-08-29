@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
-
 export const ListingsRouter = createTRPCRouter({
   createNewListing: publicProcedure
     .input(
@@ -182,6 +181,12 @@ export const ListingsRouter = createTRPCRouter({
                       },
                       {
                         location: {
+                          contains: input.locale,
+                          mode: "insensitive",
+                        },
+                      },
+                      {
+                        county: {
                           contains: input.locale,
                           mode: "insensitive",
                         },

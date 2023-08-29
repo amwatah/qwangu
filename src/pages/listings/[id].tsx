@@ -29,7 +29,7 @@ export default function SingleListingPage() {
         children: <>You have booked a spot on this listing . Proceed to payment ?</>,
         labels: { confirm: "Checkout", cancel: "Cancel" },
         onCancel: () => console.log("Cancel"),
-        onConfirm: () => void router.push("/mybookings"),
+        onConfirm: () => void router.push("/bookings"),
         centered: true,
       });
     },
@@ -61,7 +61,7 @@ export default function SingleListingPage() {
           />
         )}
       </section>
-      <section className=" order-3 flex flex-col sm:px-2">
+      <section className=" order-3 flex flex-col sm:px-4">
         <p className="flex items-center justify-between">
           <span className="">Property Type</span>
           <span className="">{listingInfo.data?.propertyType}</span>

@@ -237,4 +237,55 @@ export const ListingsRouter = createTRPCRouter({
         console.log(error);
       }
     }),
+  updateListing: publicProcedure
+    .input(
+      z.object({
+        listingID: z.string(),
+        vacancies: z.number().optional(),
+        cost: z.number().optional(),
+        location: z.string().optional(),
+        description: z.string().optional(),
+        contact: z.string().optional(),
+        amenities: z.string().array().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const listingUpdate = await ctx.prisma.listing.update({
+          where: {
+            id: input.listingID,
+          },
+          data: {
+            vacancies: input.vacancies,
+            cost: input.cost,
+            location: input.location,
+            description: input.description,
+            contact: input.contact,
+            amenities: input.amenities,
+          },
+        });
+        return listingUpdate;
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+
+  deleteListing: publicProcedure
+    .input(
+      z.object({
+        listingID: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const listingDeletion = await ctx.prisma.listing.delete({
+          where: {
+            id: input.listingID,
+          },
+        });
+        return listingDeletion;
+      } catch (error) {
+        console.log(error);
+      }
+    }),
 });

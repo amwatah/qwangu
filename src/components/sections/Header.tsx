@@ -80,7 +80,7 @@ export default function Header() {
               <Link href="/">
                 <NavLink label="My Listings" icon={<BsHouseCheck size={20} />} />
               </Link>
-              <Link href="/">
+              <Link href="/bookings">
                 <NavLink label="My Bookings" icon={<BsHouseHeart size={20} />} />
               </Link>
               <SignOutButton>

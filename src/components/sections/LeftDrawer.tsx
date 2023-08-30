@@ -21,6 +21,7 @@ export default function LeftDrawer() {
         }}
         overlayProps={{ opacity: 0.5, blur: 4 }}
         title="Qwangu"
+        transitionProps={{ transition: "slide-right", duration: 150, timingFunction: "linear" }}
       >
         <h4>Categories</h4>
         <Link href="/#request" onClick={() => setSelectedProperty("Hostel")}>

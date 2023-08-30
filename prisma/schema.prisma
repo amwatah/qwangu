@@ -21,14 +21,14 @@ model Listing {
   description    String?
   contact        String
   vacancies      Int
-  bedRooms       Int       @default(0)
   amenities      String[]
-  isForSale      Boolean   @default(false)
   promoted       Boolean   @default(false)
   verified       Boolean   @default(false)
-  uploadedImages Int
-  member         Member    @relation(fields: [memberId], references: [id])
   memberId       String
+  uploadedImages Int
+  isForSale      Boolean   @default(false)
+  bedRooms       Int       @default(0)
+  member         Member    @relation(fields: [memberId], references: [id])
   reviews        Reveiws[]
 }
 
@@ -36,10 +36,10 @@ model Booking {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  paid      Boolean  @default(false)
-  member    Member   @relation(fields: [memberId], references: [id])
   memberId  String
+  paid      Boolean  @default(false)
   listingId String
+  member    Member   @relation(fields: [memberId], references: [id])
 
   @@unique([memberId, listingId])
 }
@@ -49,10 +49,10 @@ model Reveiws {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   message   String
-  listing   Listing  @relation(fields: [listingId], references: [id])
   listingId String
-  member    Member   @relation(fields: [memberId], references: [id])
   memberId  String
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  member    Member   @relation(fields: [memberId], references: [id])
 }
 
 model Member {

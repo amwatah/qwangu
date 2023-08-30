@@ -5,19 +5,15 @@
 await import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
-const config = {
-  reactStrictMode: true,
+import withPWA from 'next-pwa';
 
-  /**
-   * If you have `experimental: { appDir: true }` set, then you must comment the below `i18n` config
-   * out.
-   *
-   * @see https://github.com/vercel/next.js/issues/41980
-   */
-  // i18n: {
-  //   locales: ["en"],
-  //   defaultLocale: "en",
-  // },
-};
 
-export default config;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+export default withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable:process.env.NODE_ENV === 'development'
+})({
+  reactStrictMode : true
+});

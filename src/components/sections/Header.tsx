@@ -17,7 +17,7 @@ export default function Header() {
   const [globalSearchValue, setGlobalSearchValue] = useAtom(globalSearchValueAtom);
 
   return (
-    <Paper className="  fixed top-0 z-[1000] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow-2xl sm:p-4 sm:px-8">
+    <Paper className="  fixed top-0 z-[1000] mx-auto flex w-full items-center justify-between gap-x-2 bg-opacity-100 p-2 px-4 shadow sm:p-4 sm:px-8">
       <div className=" flex flex-1 items-center">
         <Burger
           opened={drawerOpen}
@@ -77,7 +77,7 @@ export default function Header() {
               <Link href="/listings/new">
                 <NavLink label="Add Listing" icon={<MdOutlineAddHomeWork size={20} />} />
               </Link>
-              <Link href="/">
+              <Link href="/listings/created">
                 <NavLink label="My Listings" icon={<BsHouseCheck size={20} />} />
               </Link>
               <Link href="/bookings">

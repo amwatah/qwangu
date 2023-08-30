@@ -46,13 +46,6 @@ export default function ListingsPage() {
           matchedListings.data.map((listing) => (
             <>
               <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
-              <ListingCard key={listing.id} listingId={listing.id} />
             </>
           ))
         ) : (

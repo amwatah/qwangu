@@ -96,6 +96,9 @@ export const ListingsRouter = createTRPCRouter({
           select: {
             id: true,
           },
+          where: {
+            promoted: true,
+          },
           take: input.limit,
           orderBy: {
             createdAt: "desc",

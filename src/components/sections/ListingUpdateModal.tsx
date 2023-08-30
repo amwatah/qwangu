@@ -9,6 +9,7 @@ interface ListingUpdateModalProps {
   listingID: string;
 }
 export default function ListingUpdateModal({ listingID }: ListingUpdateModalProps) {
+  const queryClient = api.useContext();
   const listingInfo = api.listings.getListingInfo.useQuery({ listingId: listingID });
   const updateListing = api.listings.updateListing.useMutation({
     onSuccess: () => {
@@ -16,6 +17,7 @@ export default function ListingUpdateModal({ listingID }: ListingUpdateModalProp
         title: "Sucess",
         message: "Listing Updated",
       });
+      void queryClient.listings.getListingInfo.refetch({ listingId: listingID });
     },
   });
 

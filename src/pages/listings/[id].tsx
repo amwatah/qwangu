@@ -17,11 +17,16 @@ export default function SingleListingPage() {
   const { user } = useUser();
   const listingId = useRouter().query.id;
   const router = useRouter();
+  const queryClient = api.useContext();
   const listingInfo = api.listings.getListingInfo.useQuery({ listingId: listingId as string });
   const similarListings = api.listings.getRelatedListings.useQuery({ propertyType: listingInfo.data?.propertyType });
   const listingsBySameOwner = api.listings.getRelatedListings.useQuery({ ownerId: listingInfo.data?.memberId });
   const listingReviews = api.reviews.getListingReviews.useQuery({ listingId: listingId as string });
-  const addReveiw = api.reviews.addReveiw.useMutation();
+  const addReveiw = api.reviews.addReveiw.useMutation({
+    onSuccess: () => {
+      void queryClient.reviews.getListingReviews.refetch({ listingId: listingId as string });
+    },
+  });
   const bookListing = api.bookings.addListingBooking.useMutation({
     onSuccess: () => {
       openConfirmModal({
@@ -61,7 +66,7 @@ export default function SingleListingPage() {
           />
         )}
       </section>
-      <section className=" order-3 flex flex-col sm:px-4">
+      <section className=" order-3 flex flex-col sm:px-4 sm:pl-8">
         <p className="flex items-center justify-between">
           <span className="">Property Type</span>
           <span className="">{listingInfo.data?.propertyType}</span>

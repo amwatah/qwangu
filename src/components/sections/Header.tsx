@@ -9,6 +9,7 @@ import { SignInButton, SignOutButton, UserButton, useUser } from "@clerk/nextjs"
 import { useAtom } from "jotai";
 import { drawerOpenAtom, globalSearchValueAtom } from "@/stores";
 import { useRouter } from "next/router";
+import { RiMenu4Line } from "react-icons/ri";
 
 export default function Header() {
   const { user } = useUser();
@@ -22,7 +23,7 @@ export default function Header() {
         <Burger
           opened={drawerOpen}
           onClick={() => {
-            setDrawerOpen(true);
+            setDrawerOpen(!drawerOpen);
           }}
           size="sm"
           className=" sm:hidden"
@@ -66,7 +67,7 @@ export default function Header() {
           <Menu withArrow withinPortal>
             <Menu.Target>
               <div className=" flex items-center">
-                <Burger opened={false} size="sm" />
+                 <RiMenu4Line size={24}/>
                 <CgProfile size={24} />
               </div>
             </Menu.Target>

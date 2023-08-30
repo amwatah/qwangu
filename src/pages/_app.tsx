@@ -10,7 +10,7 @@ import MainLayout from "@/components/layouts/MainLayout";
 import { useState } from "react";
 
 function App({ Component, pageProps }: AppProps) {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
   const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value ?? (colorScheme === "dark" ? "light" : "dark"));
 
   return (

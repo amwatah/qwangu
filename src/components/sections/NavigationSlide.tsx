@@ -14,7 +14,7 @@ export default function NavigationSlide() {
   const [, setSelectedProperty] = useAtom(selectedPropertyAtom);
   const [globalSearchValue, setGlobalSearchValue] = useAtom(globalSearchValueAtom);
   return (
-    <Paper className="  grid-col-1  fixed  left-0 top-[7vh]   z-[100] mx-auto grid w-screen pb-0 pt-4 shadow-none sm:top-[8vh]">
+    <Paper className="  grid-col-1    left-0 top-[7vh]   z-[100] mx-auto grid w-screen pb-0 pt-4 shadow-none sm:top-[8vh]">
       <div className=" flex w-full justify-center  sm:hidden">
         <Input
           value={globalSearchValue}

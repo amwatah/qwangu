@@ -16,7 +16,7 @@ export default function ListingCard({ listingId }: ListingCardProps) {
     <Link href={`/listings/${listingId}`} className="group relative  rounded-lg p-4 shadow-sm shadow-indigo-100">
       {listingInfo.data?.verified && <VscVerified size={24} className=" absolute right-[5%] top-[5%] z-50 text-green-500" />}
       {listingInfo.data?.uploadedImages ? (
-        listingInfo.data.uploadedImages > 0 && !loading && !error ? (
+        listingInfo.data.uploadedImages > 0 && !error ? (
           <img alt="Logo" src={logoUrl} className="h-56 w-full rounded-md object-cover group-hover:animate-twPulse" />
         ) : (
           <>
